@@ -1,0 +1,219 @@
+@import url('https://rsms.me/inter/inter.css');
+* { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  * { font-family: 'Inter var', sans-serif;}
+}
+
+*{
+    color: #23689b;
+}
+
+body{
+    background-color: #f4f5db;
+}
+
+  
+.main{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.all-wrapper{
+    background-color: #d9dab0;
+    border-radius: 50px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.title{
+    font-size: 35px;
+    font-weight: bolder;
+    padding: 10px;
+    margin: 0px;
+}
+
+.subtitle{
+    font-style: italic;
+    padding: 0px;
+    margin: 0 0 20px 0;
+}
+
+
+input[type=text]{
+    box-sizing: border-box;
+    padding: 15px 12px;
+    margin: 8px 0 0 0;
+}
+
+.pretty-button{
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: #487e95;
+    border-style: none;
+    border-radius: 10px;
+    height: 25px;
+    vertical-align: middle;
+    font-weight: 500;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+
+.pretty-button:active{
+    background-color: white;
+    color: #487e95;
+    box-shadow: none;
+}
+
+.option{
+    border: none;
+    width:70%;
+    height: 30px;
+    border-radius: 10px;
+}
+
+#add-button{
+    margin-left: 5px;
+    width: 60px;
+}
+
+#add-button:hover{
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-5px);
+}
+
+#add-button:active{
+    border: 3px solid #2EE59D; 
+    background-color: white; 
+    color: #487e95;
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+.list-wrapper{
+    background-color: white;
+    height: 100%;
+    width: 500px;
+    border-radius: 10px;
+    margin:auto;
+    overflow: auto;
+}
+
+.highlighted {
+    background-color:grey;
+}
+
+#drop-region {
+    border-radius: 10px;
+    box-shadow:0 0 35px rgba(0,0,0,0.05);
+    /* width:400px; */
+    padding:60px 40px;
+    text-align: center;
+    cursor:pointer;
+    transition:.3s;
+}
+#drop-region:hover {
+    box-shadow:0 0 45px rgba(0,0,0,0.1);
+}
+ 
+#image-preview {
+    margin-top:20px;
+}
+#image-preview .image-view {
+    display: inline-block;
+    position:relative;
+    margin-right: 13px;
+    margin-bottom: 13px;
+}
+#image-preview .image-view img {
+    max-width: 100px;
+    max-height: 100px;
+}
+#image-preview .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    background: rgba(255,255,255,0.5);
+}
+
+#videoElement {
+	width: 100%;
+	height:100%;
+	background-color: #666;
+}
+
+.input-camera{
+    background-color: black;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    margin:auto;
+    overflow: auto;
+}
+
+#control-wrapper{
+    margin-top: 5px;
+}
+
+#clear-completed-button:hover{
+    background-color:  #ec4646;
+    box-shadow: 0px 15px 20px rgba(236, 70, 70, 0.4);
+    color: #fff;
+    transform: translateY(-5px);
+}
+
+#empty-button:hover{
+    background-color: #ec4646;
+    box-shadow: 0px 15px 20px rgba(236, 70, 70, 0.4);
+    color: #fff;
+    transform: translateY(-5px);
+}
+
+#save-button:hover{
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-5px);
+}
+
+#clear-completed-button:active{
+    border: 3px solid #ec4646; 
+    background-color: white; 
+    color: #487e95;
+    transform: translateY(5px);
+    box-shadow: none;
+}
+
+#empty-button:active{
+    border: 3px solid #ec4646;  
+    background-color: white; 
+    color: #487e95;  
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+#save-button:active{
+    border: 3px solid #2EE59D; 
+    background-color: white; 
+    color: #487e95;  
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+footer{
+    margin: 15px;
+    font-size: 14px;
+}
+

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- specifies the character encoding for the HTML doc -->
+    <meta name="description" content="To-do list">
+    <!-- define description of webpage -->
+    <meta name="keywords" content="to-do, to, do">
+    <meta name="author" content="John Doe">
+    <!-- define author of a page -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Setting the viewport (user's visible area of a webpage) to make your website look good on all devices -->
+    <!-- width => sets the width of the page to follow the screen-width -->
+    <!-- initial-scale => sets the initial zoom level when first loaded -->
+    <title>UI Kamera</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="main">
+        <div class="all-wrapper">
+            <section>
+                <header>
+                    <h2 class="title">Pilih sumber</h2>
+                </header>
+                <main>
+                    <form name="form" enctype="multipart/form-data">
+                        <div class="main-wrapper">
+
+                            <select name="type" class="option" id="option-type">
+                                <option value="image">Image/File</option>
+                                <option value="camera">Camera</option>
+                            </select>
+                            <br>
+                            <br>
+                            <select name="camera" class="option" id="option-camera">
+                            </select>
+                            <!-- <input type="button" id="add-button" class="pretty-button" value="Add"> -->
+                        </div>
+                        <br>
+                        <div class="list-wrapper">
+                            <div id="drop-region">
+                                <div class="drop-message">
+                                    Drag & Drop images or click to upload
+                                </div>
+                                <div id="image-preview"></div>
+                            </div>
+
+                            <video autoplay="true" id="videoElement">
+
+                            </video>
+                        </div>
+                        <br>
+
+                        <div id="control-wrapper">
+                            <button id="save-button" class="pretty-button">Prediksi</button>
+                        </div>
+                    </form>
+                </main>
+            </section>
+            <section>
+                <header>
+                    <h2 class="title">Hasil prediksi</h2>
+                </header>
+                <main>
+                    <p class="subtitle" id="prediksi">Belum ada hasil prediksi</p>
+                </main>
+                <main>
+
+                </main>
+            </section>
+            <footer>
+                <div class="footer-title">&#169;2022 by Universitas Surabaya&#8482;</div>
+            </footer>
+        </div>
+    </div>
+    <script>
+        //Handle Drag & Drop Image Uploading
+        var // where files are dropped + file selector is opened
+            dropRegion = document.getElementById("drop-region"),
+            // where images are previewed
+            imagePreviewRegion = document.getElementById("image-preview");
+        img = document.createElement("img");
+        imagePreviewRegion.appendChild(img);
+        // open file selector when clicked on the drop region
+        var fakeInput = document.createElement("input");
+        fakeInput.type = "file";
+        fakeInput.accept = "image/*";
+        fakeInput.multiple = false;
+        dropRegion.addEventListener('click', function () {
+            fakeInput.click();
+        });
+        fakeInput.addEventListener("change", function () {
+            var files = fakeInput.files;
+            handleFiles(files);
+        });
+
+        function preventDefault(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        dropRegion.addEventListener('dragenter', preventDefault, false);
+        dropRegion.addEventListener('dragleave', preventDefault, false);
+        dropRegion.addEventListener('dragover', preventDefault, false);
+        dropRegion.addEventListener('drop', preventDefault, false);
+        dropRegion.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            var dt = e.dataTransfer,
+                files = dt.files;
+
+            if (files.length) {
+
+                handleFiles(files);
+
+            } else {
+
+                // check for img
+                var html = dt.getData('text/html'),
+                    match = html && /\bsrc="?([^"\s]+)"?\s*/.exec(html),
+                    url = match && match[1];
+
+
+
+                if (url) {
+                    uploadImageFromURL(url);
+                    return;
+                }
+
+            }
+
+
+            function uploadImageFromURL(url) {
+                var img = new Image;
+                var c = document.createElement("canvas");
+                var ctx = c.getContext("2d");
+
+                img.onload = function () {
+                    c.width = this.naturalWidth;     // update canvas size to match image
+                    c.height = this.naturalHeight;
+                    ctx.drawImage(this, 0, 0);       // draw in image
+                    c.toBlob(function (blob) {        // get content as PNG blob
+
+                        // call our main function
+                        handleFiles([blob]);
+
+                    }, "image/png");
+                };
+                img.onerror = function () {
+                    alert("Error in uploading");
+                }
+                img.crossOrigin = "";              // if from different origin
+                img.src = url;
+            }
+
+        }
+
+        function handleFiles(files) {
+            console.log(files);
+            if (validateImage(files[0])) {
+                previewAnduploadImage(files[0]);
+            }
+        }
+
+        function validateImage(image) {
+            // check the type
+            var validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (validTypes.indexOf(image.type) === -1) {
+                alert("Invalid File Type");
+                return false;
+            }
+
+            // check the size
+            var maxSizeInBytes = 10e6; // 10MB
+            if (image.size > maxSizeInBytes) {
+                alert("File terlalu besar (Harus lebih kecil dari 10 MB)");
+                return false;
+            }
+
+            return true;
+        }
+
+        function previewAnduploadImage(image) {
+            // read the image...
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+                img.width = '400';
+            }
+            reader.readAsDataURL(image);
+        }
+
+        function detectDragDrop() {
+            var div = document.createElement('div');
+            return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)
+        }
+
+        // change the message
+        var dragSupported = detectDragDrop();
+        if (!dragSupported) {
+            document.getElementsByClassName("drop-message")[0].innerHTML = 'Click to upload';
+        }
+
+        dropRegion.addEventListener('dragenter', highlight, false);
+        dropRegion.addEventListener('dragover', highlight, false);
+        dropRegion.addEventListener('dragleave', unhighlight, false);
+        dropRegion.addEventListener('drop', unhighlight, false);
+
+        function highlight() {
+            dropRegion.classList.add('highlighted');
+        }
+        function unhighlight() {
+            dropRegion.classList.remove("highlighted");
+        }
+
+        //Handle Video Camera
+        var video = document.querySelector("#videoElement");
+
+        function showCamera() {
+            if (navigator.mediaDevices.getUserMedia) {
+                var id = $("#option-camera").val();
+                console.log(id);
+                navigator.mediaDevices.getUserMedia({ video: { deviceId: id } })
+                    .then(function (stream) {
+
+                        video.srcObject = stream;
+                    })
+                    .catch(function (err0r) {
+                        console.log(err0r);
+                        console.log("Something went wrong!");
+                    });
+
+            }
+        }
+
+        function stopCamera(e) {
+            var stream = video.srcObject;
+            var tracks = stream.getTracks();
+
+            for (var i = 0; i < tracks.length; i++) {
+                var track = tracks[i];
+                track.stop();
+            }
+
+            video.srcObject = null;
+        }
+
+        function addInputCamera() {
+            $('#option-camera').find('option').remove();
+            if (!navigator.mediaDevices?.enumerateDevices) {
+                console.log("enumerateDevices() not supported.");
+            } else {
+                // List cameras and microphones.
+                navigator.mediaDevices.enumerateDevices()
+                    .then((devices) => {
+                        devices.forEach((device) => {
+                            if (device.kind == "videoinput") {
+                                $('#option-camera').append('<option value="' + device.deviceId + '">' + device.label + '</option>');
+                            }
+                        });
+                    })
+                    .catch((err) => {
+                        console.error(`${err.name}: ${err.message}`);
+                    });
+            }
+        }
+
+        function deleteImage(){
+            img.src='';
+        }
+
+        $('#videoElement').hide();
+        $('#option-camera').hide();
+        $('#option-type').change(function () {
+            if ($('#option-type').val() == 'camera') {
+                $('#videoElement').show();
+                $('#option-camera').show();
+                deleteImage();
+                $("#drop-region").hide();
+                $('#save-button').hide();
+                addInputCamera();
+                showCamera();
+            } else {
+                $("#drop-region").show();
+                $('#save-button').show();
+
+                $('#option-camera').hide();
+                $('#videoElement').hide();
+
+                stopCamera();
+            }
+        });
+        $('#option-camera').change(function () {
+            showCamera();
+        });
+        $("form").get(0).reset();
+    </script>
+</body>
+
+</html>
